@@ -5,8 +5,8 @@ This project generates a ready-to-use installation of the https://github.com/err
 This image is geared specifically to verify Asciidoc files using the Microsoft ruleset. It contains:
 
 * `vale` 1.7.1
-* [Microsoft ruleset](https://github.com/errata-ai/Microsoft)
-* [Asciidoctor](https://asciidoctor.org/)
+* https://github.com/errata-ai/Microsoft[Microsoft ruleset]
+* https://asciidoctor.org/[Asciidoctor]
 
 == Usage
 
