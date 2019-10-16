@@ -27,13 +27,14 @@ RUN apk add --update \
     python \
     py-pip \
     asciidoctor \
+    git \
    && pip install docutils \
    && rm -rf /var/cache/apk/*
 
 # Copy our static executable.
-COPY --from=builder /vale-1.7.1/bin/vale /vale
+COPY --from=builder /vale-1.7.1/bin/vale /usr/local/bin/vale
 COPY --from=builder /vale-1.7.1/Microsoft /styles/Microsoft
 COPY vale.ini /.vale.ini
 
-ENTRYPOINT ["/vale"]
+ENTRYPOINT ["vale"]
 
