@@ -4,17 +4,14 @@
 FROM golang:alpine AS builder
 
 # Install build tools
-RUN apk update && apk add --no-cache wget zip tar make
+RUN apk update && apk add --no-cache wget zip tar
 WORKDIR /
 
-RUN wget https://github.com/errata-ai/vale/archive/v1.7.1.tar.gz
-RUN tar -xvzf v1.7.1.tar.gz
-
-WORKDIR /vale-1.7.1
-RUN make
+RUN wget https://github.com/errata-ai/vale/releases/download/v2.1.1/vale_2.1.1_Linux_64-bit.tar.gz
+RUN tar -xvzf vale_2.1.1_Linux_64-bit.tar.gz
 
 # Install syntax file
-RUN wget https://github.com/errata-ai/Microsoft/releases/download/v0.6.1/Microsoft.zip
+RUN wget https://github.com/errata-ai/Microsoft/releases/download/v0.7.0/Microsoft.zip
 RUN unzip Microsoft.zip
 
 
@@ -32,8 +29,8 @@ RUN apk add --update \
    && rm -rf /var/cache/apk/*
 
 # Copy our static executable.
-COPY --from=builder /vale-1.7.1/bin/vale /usr/local/bin/vale
-COPY --from=builder /vale-1.7.1/Microsoft /styles/Microsoft
+COPY --from=builder /vale /usr/local/bin/vale
+COPY --from=builder /Microsoft /styles/Microsoft
 COPY vale.ini /.vale.ini
 
 ENTRYPOINT ["vale"]
