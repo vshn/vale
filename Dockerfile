@@ -34,5 +34,5 @@ COPY --from=builder /vale /usr/local/bin/vale
 COPY --from=builder /Microsoft /styles/Microsoft
 COPY vale.ini /.vale.ini
 
-ENTRYPOINT ["/usr/local/bin/vale"]
+CMD ["/usr/local/bin/vale"]
 
