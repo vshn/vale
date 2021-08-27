@@ -2,10 +2,11 @@
 
 This project generates a ready-to-use installation of the https://github.com/errata-ai/vale[vale tool], a "syntax-aware linter for prose built with speed and extensibility in mind."
 
-This image is geared specifically to verify Asciidoc files using the Microsoft ruleset. It contains:
+This image is geared specifically to verify Asciidoc files using the Microsoft, Openly and built-in Vale text style rules. It contains:
 
 * `vale`
-* https://github.com/errata-ai/Microsoft[Microsoft ruleset]
+* https://github.com/errata-ai/Microsoft[Microsoft style rules]
+* https://github.com/testthedocs/Openly[Openly style rules]
 * https://asciidoctor.org/[Asciidoctor]
 
 == Usage
@@ -17,4 +18,3 @@ Use it as follows, for example on an Antora project root, to verify all Asciidoc
 You can also specify an individual file instead of a whole folder:
 
 `docker run --rm -t -v $(pwd)/modules/ROOT/pages:/pages vshn/vale /pages/file.adoc`
-
