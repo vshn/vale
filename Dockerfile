@@ -21,7 +21,7 @@ RUN wget https://github.com/testthedocs/Openly/releases/download/0.3.1/Openly.zi
 ############################
 # STEP 2
 ############################
-FROM alpine:3.11.6
+FROM alpine:3.17.1
 
 RUN apk add --update \
     python3 \
