@@ -7,11 +7,11 @@ FROM golang:alpine AS builder
 RUN apk update && apk add --no-cache wget zip tar
 WORKDIR /
 
-RUN wget https://github.com/errata-ai/vale/releases/download/v2.10.5/vale_2.10.5_Linux_64-bit.tar.gz && \
-    tar -xvzf vale_2.10.5_Linux_64-bit.tar.gz
+RUN wget https://github.com/errata-ai/vale/releases/download/v2.15.4/vale_2.15.4_Linux_64-bit.tar.gz && \
+    tar -xvzf vale_2.15.4_Linux_64-bit.tar.gz
 
 # Install Microsoft style file
-RUN wget https://github.com/errata-ai/Microsoft/releases/download/v0.8.1/Microsoft.zip && \
+RUN wget https://github.com/errata-ai/Microsoft/releases/download/v0.9.0/Microsoft.zip && \
     unzip Microsoft.zip
 
 # Install Openly style file
