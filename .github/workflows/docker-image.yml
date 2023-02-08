@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@v3
       - name: Docker labels & tags metadata
         id: meta
-        uses: docker/metadata-action@v3
+        uses: docker/metadata-action@v4
         with:
           images: ${{ github.repository }} # same name/app on dockerhub as on github
       - name: Log in to Docker Hub
