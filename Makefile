@@ -1,5 +1,5 @@
 all: build
 
 build:
-	docker build -t vshn/vale .
+	podman build -t vshn/vale .
 

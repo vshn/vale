@@ -1,27 +1,27 @@
 ############################
 # STEP 1
 ############################
-FROM golang:alpine AS builder
+FROM docker.io/library/golang:alpine AS builder
 
 # Install build tools
 RUN apk update && apk add --no-cache wget zip tar
 WORKDIR /
 
-RUN wget https://github.com/errata-ai/vale/releases/download/v2.15.4/vale_2.15.4_Linux_64-bit.tar.gz && \
-    tar -xvzf vale_2.15.4_Linux_64-bit.tar.gz
+RUN wget -q https://github.com/errata-ai/vale/releases/download/v2.15.4/vale_2.15.4_Linux_64-bit.tar.gz && \
+    tar -xzf vale_2.15.4_Linux_64-bit.tar.gz
 
 # Install Microsoft style file
-RUN wget https://github.com/errata-ai/Microsoft/releases/download/v0.9.0/Microsoft.zip && \
-    unzip Microsoft.zip
+RUN wget -q https://github.com/errata-ai/Microsoft/releases/download/v0.9.0/Microsoft.zip && \
+    unzip -qq Microsoft.zip
 
 # Install Openly style file
-RUN wget https://github.com/testthedocs/Openly/releases/download/0.3.1/Openly.zip && \
-    unzip Openly.zip
+RUN wget -q https://github.com/testthedocs/Openly/releases/download/0.3.1/Openly.zip && \
+    unzip -qq Openly.zip
 
 ############################
 # STEP 2
 ############################
-FROM alpine:3.17.2
+FROM docker.io/library/alpine:3.17.2
 
 RUN apk add --update \
     python3 \
@@ -40,4 +40,3 @@ COPY vale.ini /.vale.ini
 COPY Vocab /styles/Vocab
 
 ENTRYPOINT ["/usr/local/bin/vale"]
-
