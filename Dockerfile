@@ -21,7 +21,7 @@ RUN wget -q https://github.com/testthedocs/Openly/releases/download/0.3.1/Openly
 ############################
 # STEP 2
 ############################
-FROM docker.io/library/alpine:3.17.2
+FROM docker.io/library/alpine:3.17.3
 
 RUN apk add --update \
     python3 \
