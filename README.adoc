@@ -17,3 +17,14 @@ Use it as follows, for example on an Antora project root, to verify all Asciidoc
 --
 podman run --rm --volume "${PWD}"/src/modules/ROOT/pages:/pages --workdir /pages ghcr.io/vshn/vale:2.15.5 --minAlertLevel=error .
 --
+
+== Release
+
+To release a new version, create a new tag and push it to GitHub. Ideally the tags follow the vale version contained in the image.
+
+To automatically create a new signed tag with the current vale version, run:
+
+[source,bash]
+--
+./tag-release.sh
+--
