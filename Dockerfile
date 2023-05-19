@@ -23,7 +23,8 @@ RUN wget -q https://github.com/errata-ai/Microsoft/releases/download/v${MS_STYLE
 
 # Install Openly style file
 RUN wget -q https://github.com/testthedocs/Openly/releases/download/${OPENLY_STYLE_VERSION}/Openly.zip && \
-    unzip -qq Openly.zip
+    unzip -qq Openly.zip && \
+    sed -i 's|openly|Openly|g' Openly/Spelling.yml
 
 ############################
 # STEP 2
