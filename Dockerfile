@@ -1,7 +1,7 @@
 ############################
 # STEP 1
 ############################
-FROM docker.io/library/golang:alpine AS builder
+FROM docker.io/library/alpine:3.18.0 AS builder
 
 # renovate: datasource=github-releases depName=errata-ai/vale
 ENV VALE_VERSION=2.15.4
@@ -11,7 +11,7 @@ ENV MS_STYLE_VERSION=0.9.0
 ENV OPENLY_STYLE_VERSION=0.3.1
 
 # Install build tools
-RUN apk update && apk add --no-cache wget zip tar
+RUN apk add --no-cache wget zip tar
 WORKDIR /
 
 RUN wget -q https://github.com/errata-ai/vale/releases/download/v${VALE_VERSION}/vale_${VALE_VERSION}_Linux_64-bit.tar.gz && \
@@ -30,19 +30,18 @@ RUN wget -q https://github.com/testthedocs/Openly/releases/download/${OPENLY_STY
 ############################
 FROM docker.io/library/alpine:3.18.0
 
-RUN apk add --update \
+RUN apk add --update --no-cache \
     python3 \
     py-pip \
     asciidoctor \
     git \
     libc6-compat \
-   && pip install docutils \
-   && rm -rf /var/cache/apk/*
+   && pip install docutils
 
 # Copy our static executable.
-COPY --from=builder /vale /usr/local/bin/vale
+COPY --from=builder /vale      /usr/local/bin/vale
 COPY --from=builder /Microsoft /styles/Microsoft
-COPY --from=builder /Openly /styles/Openly
+COPY --from=builder /Openly    /styles/Openly
 COPY vale.ini /.vale.ini
 COPY Vocab /styles/Vocab
 
