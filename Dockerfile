@@ -3,19 +3,23 @@
 ############################
 FROM docker.io/library/golang:alpine AS builder
 
+ENV VALE_VERSION=2.15.4
+ENV MS_STYLE_VERSION=0.9.0
+ENV OPENLY_STYLE_VERSION=0.3.1
+
 # Install build tools
 RUN apk update && apk add --no-cache wget zip tar
 WORKDIR /
 
-RUN wget -q https://github.com/errata-ai/vale/releases/download/v2.15.4/vale_2.15.4_Linux_64-bit.tar.gz && \
-    tar -xzf vale_2.15.4_Linux_64-bit.tar.gz
+RUN wget -q https://github.com/errata-ai/vale/releases/download/v${VALE_VERSION}/vale_${VALE_VERSION}_Linux_64-bit.tar.gz && \
+    tar -xzf vale_${VALE_VERSION}_Linux_64-bit.tar.gz
 
 # Install Microsoft style file
-RUN wget -q https://github.com/errata-ai/Microsoft/releases/download/v0.9.0/Microsoft.zip && \
+RUN wget -q https://github.com/errata-ai/Microsoft/releases/download/v${MS_STYLE_VERSION}/Microsoft.zip && \
     unzip -qq Microsoft.zip
 
 # Install Openly style file
-RUN wget -q https://github.com/testthedocs/Openly/releases/download/0.3.1/Openly.zip && \
+RUN wget -q https://github.com/testthedocs/Openly/releases/download/${OPENLY_STYLE_VERSION}/Openly.zip && \
     unzip -qq Openly.zip
 
 ############################
