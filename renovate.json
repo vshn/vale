@@ -21,7 +21,8 @@
       ],
       "matchStrings": [
         "renovate: datasource=(?<datasource>.*?) depName=(?<depName>.*?)\\sENV .*_VERSION=(?<currentValue>.*)\\s"
-      ]
+      ],
+      "extractVersionTemplate": "^v?(?<version>.*)$"
     }
   ]
 }
