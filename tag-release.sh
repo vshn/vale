@@ -8,7 +8,7 @@ openly_style_version="$(awk -F '=' '/OPENLY_STYLE_VERSION=/{print $2}' Dockerfil
 tag="$vale_version"
 msg="Release $tag
 
-- vale: $helm_version
+- vale: $vale_version
 - Microsoft style: $ms_style_version
 - Openly style: $openly_style_version
 "
