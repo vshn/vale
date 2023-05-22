@@ -1,5 +1,6 @@
 Aarno
 Aedifex
+Alertmanager
 Alltron
 Amboss
 Ansible
@@ -25,6 +26,7 @@ Krossa
 Larawan
 Lenovo
 Locutor
+Mailgun
 Manuela
 Marco
 Markus
@@ -45,6 +47,8 @@ Restic
 Seiso
 Speth
 Spotify
+Statuspal
+Steward
 Suter
 Swibeco
 Tatjana
