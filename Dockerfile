@@ -1,7 +1,7 @@
 ############################
 # STEP 1
 ############################
-FROM docker.io/library/alpine:3.18.4 AS builder
+FROM docker.io/library/alpine:3.18.5 AS builder
 
 # renovate: datasource=github-releases depName=errata-ai/vale
 ENV VALE_VERSION=2.29.7
@@ -29,7 +29,7 @@ RUN wget -q https://github.com/testthedocs/Openly/releases/download/${OPENLY_STY
 ############################
 # STEP 2
 ############################
-FROM docker.io/library/alpine:3.18.4
+FROM docker.io/library/alpine:3.18.5
 
 RUN apk add --update --no-cache \
     python3 \
