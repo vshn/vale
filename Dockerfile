@@ -8,7 +8,7 @@ ENV VALE_VERSION=2.30.0
 # renovate: datasource=github-releases depName=errata-ai/Microsoft
 ENV MS_STYLE_VERSION=0.14.1
 # renovate: datasource=github-releases depName=testthedocs/Openly
-ENV OPENLY_STYLE_VERSION=0.4.1
+ENV OPENLY_STYLE_VERSION=0.4.3
 
 # Install build tools
 RUN apk add --no-cache wget zip tar
