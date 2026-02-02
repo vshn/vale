@@ -1,10 +1,10 @@
 ############################
 # STEP 1
 ############################
-FROM docker.io/library/alpine:3.18.5 AS builder
+FROM docker.io/library/alpine:3.23.3 AS builder
 
 # renovate: datasource=github-releases depName=errata-ai/vale
-ENV VALE_VERSION=2.30.0
+ENV VALE_VERSION=3.13.0
 # renovate: datasource=github-releases depName=errata-ai/Microsoft
 ENV MS_STYLE_VERSION=0.14.2
 # renovate: datasource=github-releases depName=testthedocs/Openly
@@ -29,21 +29,21 @@ RUN wget -q https://github.com/testthedocs/Openly/releases/download/${OPENLY_STY
 ############################
 # STEP 2
 ############################
-FROM docker.io/library/alpine:3.18.5
+FROM docker.io/library/alpine:3.23.3
 
 RUN apk add --update --no-cache \
     python3 \
-    py-pip \
+    py3-pip \
+    py3-docutils \
     asciidoctor \
     git \
-    libc6-compat \
-   && pip install docutils
+    libc6-compat
 
 # Copy our static executable.
 COPY --from=builder /vale      /usr/local/bin/vale
 COPY --from=builder /Microsoft /styles/Microsoft
 COPY --from=builder /Openly    /styles/Openly
 COPY vale.ini /.vale.ini
-COPY Vocab /styles/Vocab
+COPY Vocab /styles/config/vocabularies
 
 ENTRYPOINT ["/usr/local/bin/vale"]
