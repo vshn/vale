@@ -5,6 +5,7 @@ Alltron
 Amboss
 Ansible
 Aukia
+auto-unseal
 Banz
 Brunner
 Bugfix
