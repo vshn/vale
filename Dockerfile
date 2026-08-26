@@ -4,7 +4,7 @@
 FROM docker.io/library/alpine:3.24.1 AS builder
 
 # renovate: datasource=github-releases depName=errata-ai/vale
-ENV VALE_VERSION=3.18.0
+ENV VALE_VERSION=3.19.0
 # renovate: datasource=github-releases depName=errata-ai/Microsoft
 ENV MS_STYLE_VERSION=0.15.1
 # renovate: datasource=github-releases depName=testthedocs/Openly
