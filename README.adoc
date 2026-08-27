@@ -20,9 +20,16 @@ podman run --rm --volume "${PWD}"/src/modules/ROOT/pages:/pages --workdir /pages
 
 == Release
 
-To release a new version, create a new tag and push it to GitHub. Ideally the tags follow the vale version contained in the image.
+Every merge to master is released. The workflow builds the image, runs it on
+each platform it publishes, and only then tags it with the vale version from the
+`Dockerfile` and moves `latest`. When that version has been released already and
+only the image around vale changed, it appends `.1`, `.2` and so on. The
+matching git tag is created too, unsigned.
 
-To automatically create a new signed tag with the current vale version, run:
+Consumers pin a version, so anything that stays on master reaches nobody.
+
+`tag-release.sh` is still there to cut a release by hand, and unlike the
+workflow it signs the tag:
 
 [source,bash]
 --

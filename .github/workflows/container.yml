@@ -16,6 +16,12 @@ on:
   pull_request:
     branches: [ master ]
 
+# Two merges in quick succession would otherwise work out the same release
+# number twice.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
@@ -24,12 +30,32 @@ jobs:
   build-and-push-image:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write # to tag a release
       packages: write
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-tags: true # to work out the next release number
+
+      # Everything that lands on master is a release: consumers pin a version,
+      # so a fix that is only on master reaches nobody. The tag is the vale
+      # version in the Dockerfile, with .1, .2 and so on when that release
+      # exists already and only the image around vale has changed.
+      - name: Work out the release
+        id: release
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        run: |
+          vale_version="$(awk -F '=' '/VALE_VERSION=/{print $2}' Dockerfile)"
+          tag="${vale_version}"
+          revision=0
+          while git rev-parse -q --verify "refs/tags/${tag}" > /dev/null; do
+            revision=$((revision + 1))
+            tag="${vale_version}.${revision}"
+          done
+          echo "tag=${tag}" >> "${GITHUB_OUTPUT}"
+          echo "Releasing ${tag}" >> "${GITHUB_STEP_SUMMARY}"
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v4
@@ -76,3 +102,34 @@ jobs:
           done
         env:
           TAGS: ${{ steps.meta.outputs.tags }}
+
+      # Add the release tags to the image the previous step just ran, rather
+      # than building again, so nothing reaches a version tag untested.
+      - name: Publish the release
+        if: steps.release.outputs.tag != ''
+        run: |
+          docker buildx imagetools create \
+            --tag "${REGISTRY}/${IMAGE_NAME}:${TAG}" \
+            --tag "${REGISTRY}/${IMAGE_NAME}:latest" \
+            "$(echo "${TAGS}" | head -n1)"
+        env:
+          TAG: ${{ steps.release.outputs.tag }}
+          TAGS: ${{ steps.meta.outputs.tags }}
+
+      - name: Tag the release
+        if: steps.release.outputs.tag != ''
+        run: |
+          ms_style_version="$(awk -F '=' '/MS_STYLE_VERSION=/{print $2}' Dockerfile)"
+          openly_style_version="$(awk -F '=' '/OPENLY_STYLE_VERSION=/{print $2}' Dockerfile)"
+          vale_version="$(awk -F '=' '/VALE_VERSION=/{print $2}' Dockerfile)"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -a "${TAG}" -m "Release ${TAG}
+
+          - vale: ${vale_version}
+          - Microsoft style: ${ms_style_version}
+          - Openly style: ${openly_style_version}
+          "
+          git push origin "${TAG}"
+        env:
+          TAG: ${{ steps.release.outputs.tag }}
