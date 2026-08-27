@@ -51,6 +51,7 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
       - name: Build and push Docker image
+        id: build
         uses: docker/build-push-action@83bfd93ab480705a7b99a2ed02765137f5ab55ba
         with:
           context: .
@@ -58,3 +59,16 @@ jobs:
           platforms: linux/amd64,linux/arm64
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
+      # A build that succeeds proves only that the files were copied. Run vale
+      # on every platform we publish, so a binary that cannot execute there is
+      # caught here instead of on someone's laptop.
+      - name: Run the image on every published platform
+        run: |
+          image="${REGISTRY}/${IMAGE_NAME}@${{ steps.build.outputs.digest }}"
+          for platform in linux/amd64 linux/arm64; do
+            echo "::group::${platform}"
+            docker run --rm --platform "${platform}" "${image}" --version
+            docker run --rm --platform "${platform}" --entrypoint vale "${image}" ls-config > /dev/null
+            echo "::endgroup::"
+          done
