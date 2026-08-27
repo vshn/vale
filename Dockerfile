@@ -1,7 +1,10 @@
 ############################
 # STEP 1
 ############################
-FROM docker.io/library/alpine:3.24.1 AS builder
+FROM --platform=$BUILDPLATFORM docker.io/library/alpine:3.24.1 AS builder
+
+# Set by buildx to the platform being built for, not the one building
+ARG TARGETARCH
 
 # renovate: datasource=github-releases depName=errata-ai/vale
 ENV VALE_VERSION=3.19.0
@@ -14,8 +17,13 @@ ENV OPENLY_STYLE_VERSION=0.4.6
 RUN apk add --no-cache wget zip tar
 WORKDIR /
 
-RUN wget -q https://github.com/errata-ai/vale/releases/download/v${VALE_VERSION}/vale_${VALE_VERSION}_Linux_64-bit.tar.gz && \
-    tar -xzf vale_${VALE_VERSION}_Linux_64-bit.tar.gz
+RUN case "${TARGETARCH}" in \
+      amd64) vale_arch="64-bit" ;; \
+      arm64) vale_arch="arm64" ;; \
+      *) echo "no vale release for ${TARGETARCH}" >&2; exit 1 ;; \
+    esac && \
+    wget -q https://github.com/errata-ai/vale/releases/download/v${VALE_VERSION}/vale_${VALE_VERSION}_Linux_${vale_arch}.tar.gz && \
+    tar -xzf vale_${VALE_VERSION}_Linux_${vale_arch}.tar.gz
 
 # Install Microsoft style file
 RUN wget -q https://github.com/errata-ai/Microsoft/releases/download/v${MS_STYLE_VERSION}/Microsoft.zip && \
