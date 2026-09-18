@@ -1,7 +1,7 @@
 ############################
 # STEP 1
 ############################
-FROM --platform=$BUILDPLATFORM docker.io/library/alpine:3.24.1 AS builder
+FROM --platform=$BUILDPLATFORM docker.io/library/alpine:3.24.2 AS builder
 
 # Set by buildx to the platform being built for, not the one building
 ARG TARGETARCH
@@ -37,7 +37,7 @@ RUN wget -q https://github.com/testthedocs/Openly/releases/download/${OPENLY_STY
 ############################
 # STEP 2
 ############################
-FROM docker.io/library/alpine:3.24.1
+FROM docker.io/library/alpine:3.24.2
 
 RUN apk add --update --no-cache \
     python3 \
