@@ -7,7 +7,7 @@ FROM --platform=$BUILDPLATFORM docker.io/library/alpine:3.24.4 AS builder
 ARG TARGETARCH
 
 # renovate: datasource=github-releases depName=errata-ai/vale
-ENV VALE_VERSION=3.26.0
+ENV VALE_VERSION=3.27.0
 # renovate: datasource=github-releases depName=errata-ai/Microsoft
 ENV MS_STYLE_VERSION=0.15.2
 # renovate: datasource=github-releases depName=testthedocs/Openly
